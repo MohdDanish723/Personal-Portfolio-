@@ -1,0 +1,316 @@
+@import "tailwindcss";
+
+/* ── Design tokens ─────────────────────────────────────────── */
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface-2: #eceef3;
+  --line: #dfe3ea;
+  --line-strong: #c6ccd8;
+  --ink: #0b0e14;
+  --ink-muted: #576074;
+  --accent: #d63a14;
+  --accent-ink: #ffffff;
+  --accent-2: #0a7aa5;
+  --glow: rgba(214, 58, 20, 0.1);
+
+  --tok-k: #c2410c;
+  --tok-s: #a16207;
+  --tok-n: #7c3aed;
+  --tok-t: #0a7aa5;
+  --tok-f: #2563eb;
+  --tok-c: #8b93a5;
+  --tok-p: #0b0e14;
+}
+
+.dark {
+  --bg: #07080b;
+  --surface: #0d1016;
+  --surface-2: #131824;
+  --line: #1f2632;
+  --line-strong: #2e3747;
+  --ink: #eceef4;
+  --ink-muted: #8b94a8;
+  --accent: #ff5b36;
+  --accent-ink: #0a0806;
+  --accent-2: #7ce0ff;
+  --glow: rgba(255, 91, 54, 0.14);
+
+  --tok-k: #ff7b5c;
+  --tok-s: #f4c97a;
+  --tok-n: #c4a7ff;
+  --tok-t: #7ce0ff;
+  --tok-f: #a8c7ff;
+  --tok-c: #5b6577;
+  --tok-p: #d5d9e4;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-2: var(--accent-2);
+  --font-display: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-serif: "Instrument Serif", Georgia, serif;
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Italic serif accent word inside any heading */
+h1 em,
+h2 em,
+h3 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.1em;
+  letter-spacing: 0;
+  color: var(--accent);
+}
+
+/* ── Background helpers ────────────────────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 25%, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 25%, #000 25%, transparent 78%);
+  opacity: 0.55;
+}
+
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--line-strong);
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  overflow: hidden;
+  border-radius: 0.6rem;
+  padding: 0.85rem 1.35rem;
+  font-size: 0.925rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+.btn:active {
+  transform: scale(0.98);
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+.btn-primary:hover::after {
+  transform: translateX(120%);
+}
+.btn-ghost {
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+.btn-ghost:hover {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+.btn svg {
+  transition: transform 0.25s ease;
+}
+.btn:hover svg.nudge {
+  transform: translateX(3px);
+}
+
+/* ── Cursor spotlight (page-level + per-card) ──────────────── */
+.cursor-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(520px circle at var(--cx, 50%) var(--cy, 50%), var(--glow), transparent 65%);
+}
+@media (hover: none) {
+  .cursor-glow {
+    display: none;
+  }
+}
+.spot {
+  position: relative;
+  isolation: isolate;
+}
+.spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), var(--glow), transparent 65%);
+}
+.spot:hover::before {
+  opacity: 1;
+}
+
+/* ── Scroll progress + reveal ──────────────────────────────── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: 2px;
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+@media (scripting: enabled) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: var(--d, 0ms);
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Masked headline: each line rises out of a clip */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.04em 0.12em 0.14em 0;
+  margin-bottom: -0.1em;
+}
+.line-mask > span {
+  display: block;
+  transform: translateY(115%);
+  animation: rise 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+.hero-in {
+  opacity: 0;
+  animation: fade-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+@keyframes rise {
+  to { transform: none; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+  100% { box-shadow: 0 0 0 9px transparent; }
+}
+.animate-fade-in { animation: fade-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.animate-float { animation: float 6s ease-in-out infinite; }
+.pulse-ring { animation: pulse-ring 1.8s ease-out infinite; }
+.caret {
+  display: inline-block;
+  width: 0.55ch;
+  height: 1.1em;
+  margin-left: 1px;
+  vertical-align: -0.18em;
+  background: var(--accent);
+  animation: blink 1s steps(2, start) infinite;
+}
+
+/* ── Scroll-driven timeline line ───────────────────────────── */
+.timeline-line {
+  position: absolute;
+  left: 0;
+  top: 0.4rem;
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+.timeline-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: top;
+  transform: scaleY(var(--p, 0));
+}
+
+/* ── Syntax highlighting ───────────────────────────────────── */
+.tok-k { color: var(--tok-k); }
+.tok-s { color: var(--tok-s); }
+.tok-n { color: var(--tok-n); }
+.tok-t { color: var(--tok-t); }
+.tok-f { color: var(--tok-f); }
+.tok-c { color: var(--tok-c); font-style: italic; }
+.tok-p { color: var(--tok-p); }
+
+/* ── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .line-mask > span { transform: none !important; }
+  .hero-in { opacity: 1 !important; }
+}
