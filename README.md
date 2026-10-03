@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Mohd Danish — Portfolio
 
 A one-page personal portfolio built with Next.js (App Router), TypeScript and
@@ -65,3 +66,6 @@ Then on vercel.com: **New Project → import the repo → add `RESEND_API_KEY` �
 
 Next.js 16 · TypeScript · Tailwind CSS v4 · next-themes · lucide-react · Resend
 Fonts: Syne, DM Sans, JetBrains Mono, Instrument Serif (Google Fonts)
+=======
+# Personal-Portfolio-
+>>>>>>> 13e58b915cbeb1bfc8936f71437113c7b088b5f9
